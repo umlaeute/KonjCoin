@@ -1,8 +1,8 @@
 # ignore a single file
-compile-blk.sh
+
 .DS_Store
 bin/
-konjungate.pro
+
 konjungated
 Konjungate-qt
 qrc_bitcoin\.cpp
