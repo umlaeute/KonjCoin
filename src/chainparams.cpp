@@ -57,13 +57,13 @@ public:
 		// The message start string is designed to be unlikely to occur in normal data.
 		// The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 		// a large 4-byte int at any alignment.
-		pchMessageStart[0] = 0x5f;
-		pchMessageStart[1] = 0x79;
-		pchMessageStart[2] = 0x64;
-		pchMessageStart[3] = 0xc9;
+		pchMessageStart[0] = 0x5a;
+		pchMessageStart[1] = 0x34;
+		pchMessageStart[2] = 0x32;
+		pchMessageStart[3] = 0xa4;
 		vAlertPubKey = ParseHex("047d56dfe4da604d86552a456c8e40b8a56f979e73508851521d043b279301f32139ccc9f1475f3fc661b97138f0b49f65eff4deb025b23862075fadcd3538cc39");
-		nDefaultPort = 44144;
-		nRPCPort = 44155;
+		nDefaultPort = 45454;
+		nRPCPort = 45455;
 		bnProofOfWorkLimit = CBigNum(~uint256(0) >> 16);
 		/* The initial difficulty after switching to NeoScrypt (0.0625) */
 		bnNeoScryptFirstTarget = CBigNum(~uint256(0) >> 28);
@@ -71,7 +71,7 @@ public:
 		// Build the genesis block. Note that the output of the genesis coinbase cannot
 		// be spent as it did not originally exist in the database.
 
-		const char* pszTimestamp = "Here 18 Dec 2017 we start the Konjungate";
+		const char* pszTimestamp = "Konjungate 8/29/2019";
 		std::vector<CTxIn> vin;
 		vin.resize(1);
 		vin[0].scriptSig = CScript() << 0 << CBigNum(42) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
@@ -83,29 +83,57 @@ public:
 		genesis.hashPrevBlock = 0;
 		genesis.hashMerkleRoot = genesis.BuildMerkleTree();
 		genesis.nVersion = 1;
-		genesis.nTime = 1513634048; //
+		genesis.nTime = 1513634048;
 		genesis.nBits = 520159231;
-		genesis.nNonce = 47950;
+		genesis.nNonce = 0;
 
+		if (true && genesis.GetHash() != hashGenesisBlock)
+                {
+                    printf("Searching for genesis block...\n");
+                    uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+                    uint256 thash;
 
+                    while (true)
+                    {
+                        thash = genesis.GetHash();
+                        if (thash <= hashTarget)
+                            break;
+                        if ((genesis.nNonce & 0xFFF) == 0)
+                        {
+                            printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+                        }
+                        ++genesis.nNonce;
+                        if (genesis.nNonce == 0)
+                        {
+                            printf("NONCE WRAPPED, incrementing time\n");
+                            ++genesis.nTime;
+                        }
+                    }
+                    printf("genesis.nTime = %u \n", genesis.nTime);
+                    printf("genesis.nNonce = %u \n", genesis.nNonce);
+                    printf("genesis.nVersion = %u \n", genesis.nVersion);
+                    printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str());
+                    printf("genesis.hashMerkleRoot = %s \n", genesis.hashMerkleRoot.ToString().c_str());
+
+                }
 
 		hashGenesisBlock = genesis.GetHash();
 
-		assert(genesis.hashMerkleRoot == uint256("0x2d960352c0162362a744b23a639a657fc8050ffba450f49a634166d7e4790b58"));
-		assert(hashGenesisBlock == uint256("0x000088660811c8469e191c629657e36b6d339b9b76ce494cd9f957d59552bb3c"));
+		assert(genesis.hashMerkleRoot == uint256("0x"));
+		assert(hashGenesisBlock == uint256("0x"));
 
 
-		base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 103); // i
+		base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 45); // K
 		base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 39); // G
 		base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 138); // x
 		base58Prefixes[STEALTH_ADDRESS] = std::vector<unsigned char>(1, 76); // X
 		base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0x06)(0x2D).convert_to_container<std::vector<unsigned char> >();
 		base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x88)(0xAD)(0xE4).convert_to_container<std::vector<unsigned char> >();
 
-		vSeeds.push_back(CDNSSeedData("america", "america.konjungatecoin.org"));
-		vSeeds.push_back(CDNSSeedData("europ", "europ.konjungatecoin.org"));
-		vSeeds.push_back(CDNSSeedData("asia",  "asia.konjungatecoin.org"));
-		vSeeds.push_back(CDNSSeedData("explorer",  "explorer.konjungatecoin.org"));
+		vSeeds.push_back(CDNSSeedData("", ""));
+		vSeeds.push_back(CDNSSeedData("", ""));
+		vSeeds.push_back(CDNSSeedData("",  ""));
+		vSeeds.push_back(CDNSSeedData("",  ""));
 		convertSeeds(vFixedSeeds, pnSeed, ARRAYLEN(pnSeed), nDefaultPort);
 
 		nPoolMaxTransactions = 3;
@@ -155,7 +183,7 @@ public:
 		genesis.nBits = 520159231;
 		genesis.nNonce = 47950;
 
-		assert(hashGenesisBlock == uint256("0x000088660811c8469e191c629657e36b6d339b9b76ce494cd9f957d59552bb3c"));
+	//	assert(hashGenesisBlock == uint256("0x000088660811c8469e191c629657e36b6d339b9b76ce494cd9f957d59552bb3c"));
 
 		vFixedSeeds.clear();
 		vSeeds.clear();

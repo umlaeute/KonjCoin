@@ -11,8 +11,8 @@ Maturity: 15 Blocks
 Stake Minimum Age: 30 Minutes
 
 Default Main-Net Network Ports:
-Port: 44144
-RPC Port: 44155
+Port: 45454
+RPC Port: 45455
 
 Website: https://KonjungateCoin.org
 

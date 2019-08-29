@@ -10,8 +10,8 @@ COIN_REPO='https://github.com/konjungatecoin/konjungatecoin.git'
 #COIN_TGZ='http://www.mastermasternode.com/konjungatecoin/XXX.zip'
 COIN_ZIP=$(echo $COIN_TGZ | awk -F'/' '{print $NF}')
 COIN_NAME='Konjungate'
-COIN_PORT=44144
-RPC_PORT=44155
+COIN_PORT=45454
+RPC_PORT=45455
 
 NODEIP=$(curl -s4 icanhazip.com)
 

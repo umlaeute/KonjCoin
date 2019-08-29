@@ -10,8 +10,8 @@ COIN_REPO='https://github.com/CircuitBreaker88/KonjCoin.git'
 #COIN_TGZ='http://github.com/KonjCoin/KonjCoin/releases/XXX.zip'
 #COIN_ZIP=$(echo $COIN_TGZ | awk -F'/' '{print $NF}')
 COIN_NAME='Konjungate'
-COIN_PORT=44144
-RPC_PORT=44155
+COIN_PORT=45454
+RPC_PORT=45455
 NODEIP=$(curl -s4 icanhazip.com)
 
 BLUE="\033[0;34m"
@@ -129,7 +129,7 @@ externalip=$NODEIP:$COIN_PORT
 masternodeprivkey=$COINKEY
 masternodeaddr=$NODEIP:$COIN_PORT
 #Addnodes
-#addnode=123.456.78.9:44144
+#addnode=123.456.78.9:45454
 EOF
 systemctl start konjungate
 }
