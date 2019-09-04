@@ -108,7 +108,7 @@ const int GetMaxTransactionSigOps();
 const int GetMaxOrphanTransactionSize();
 
 
-inline int64_t GetMNCollateral(int nHeight) { return 50000; }
+inline int64_t GetMNCollateral(int nHeight) { return 600000; }
 
 extern CScript COINBASE_FLAGS;
 extern CCriticalSection cs_main;
