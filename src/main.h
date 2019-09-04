@@ -202,7 +202,7 @@ void ThreadStakeMiner(CWallet *pwallet);
 
 extern int64_t nDevFee;
 extern bool fDevFee(int nHeight);
-#define FOUNDATION ""
+#define FOUNDATION "KtKtFksCEb75JgMwMmEbsn2EZsyVw2rbtw"
 #define FOUNDATION_TEST ""
 
 /** (try to) add transaction to memory pool **/
