@@ -85,42 +85,12 @@ public:
 		genesis.nVersion = 1;
 		genesis.nTime = 1513698048; //
 		genesis.nBits = 520159231;
-		genesis.nNonce = 0;
-
-  if (true && genesis.GetHash() != hashGenesisBlock)
-                {
-                    printf("Searching for genesis block...\n");
-                    uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
-                    uint256 thash;
-
-                    while (true)
-                    {
-                        thash = genesis.GetHash();
-                        if (thash <= hashTarget)
-                            break;
-                        if ((genesis.nNonce & 0xFFF) == 0)
-                        {
-                            printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
-                        }
-                        ++genesis.nNonce;
-                        if (genesis.nNonce == 0)
-                        {
-                            printf("NONCE WRAPPED, incrementing time\n");
-                            ++genesis.nTime;
-                        }
-                    }
-                    printf("genesis.nTime = %u \n", genesis.nTime);
-                    printf("genesis.nNonce = %u \n", genesis.nNonce);
-                    printf("genesis.nVersion = %u \n", genesis.nVersion);
-                    printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str());
-                    printf("genesis.hashMerkleRoot = %s \n", genesis.hashMerkleRoot.ToString().c_str());
-
-                }
+		genesis.nNonce = 55599;
 
 		hashGenesisBlock = genesis.GetHash();
 
-		assert(genesis.hashMerkleRoot == uint256("0xfc33355fd2dad66c6b6abace6d8066bdee354888b548f3f35f34b80cb083ef86"));
-		assert(hashGenesisBlock == uint256("0x0000e160a904c615256490439791ecbb6fe8aa575cb749334753840943be5aed"));
+		assert(genesis.hashMerkleRoot == uint256("0x5436c855d3a06521bf1b50fa3ed1fd2c5b3a18a426447316eb3a04fe3f42571d"));
+		assert(hashGenesisBlock == uint256("0x00001bf1bc996b95165e2217035160dad706d9231e8c86432e81de8e81cbdc84"));
 
 
 		base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 46); // K
