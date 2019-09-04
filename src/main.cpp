@@ -2203,24 +2203,26 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
     if (IsProofOfWork())
     {
         int64_t nReward = GetProofOfWorkReward(pindex->nHeight, nFees);
+        // Check coinbase reward
         int64_t nHeight = pindex->nHeight;
-		if (fDevFee(nHeight))
-		{
-			nReward += nDevFee;
-	  if (vtx[0].GetValueOut() > nReward)
-      return DoS(50, error("ConnectBlock() : PoW reward (plus DevFee) exceeded (actual=%d vs calculated=%d)", vtx[0].GetValueOut(), nReward));
-        CBitcoinAddress address(!TestNet() ? FOUNDATION : FOUNDATION_TEST);
-        CScript scriptPubKey;
-		  scriptPubKey.SetDestination(address.Get());
-    if (vtx[0].vout[1].scriptPubKey != scriptPubKey)
-      return error("ConnectBlock() : PoW coinbase does not pay to the Developer address)");
-    if (vtx[0].vout[1].nValue != nDevFee)
-      return error("ConnectBlock() : PoW coinbase does not pay correct amount to Developer address");
-    } else {
-    if (vtx[0].GetValueOut() > nReward)
-      return DoS(50, error("ConnectBlock() : PoW coinbase reward exceeded (actual=%d vs calculated=%d)", vtx[0].GetValueOut(), nReward));
-		  }
+        if (fDevFee(nHeight))
+        {
+        nReward += nDevFee;
+        if (vtx[0].GetValueOut() > nReward)
+            return DoS(50, error("ConnectBlock() : coinbase reward exceeded (actual=%d vs calculated=%d)", vtx[0].GetValueOut(), nReward));
+            CBitcoinAddress address(!TestNet() ? FOUNDATION : FOUNDATION_TEST);
+            CScript scriptPubKey;
+            scriptPubKey.SetDestination(address.Get());
+            if (vtx[0].vout[1].scriptPubKey != scriptPubKey)
+              return error("ConnectBlock() : PoW coinbase does not pay to the Developer address)");
+            if (vtx[0].vout[1].nValue != nDevFee)
+              return error("ConnectBlock() : PoW coinbase does not pay to correct amount to Developer address");
+      } else {
+        if (vtx[0].GetValueOut() > nReward)
+            return DoS(50, error("ConnectBlock() : PoW coinbase reward exceeded (actual=%d vs calculated=%d)", vtx[0].GetValueOut(), nReward));
+      }
     }
+
     if (IsProofOfStake())
     {
         // ppcoin: coin stake tx earns reward instead of paying fee
@@ -2232,6 +2234,20 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
 
         if (nStakeReward > nCalculatedStakeReward)
             return DoS(100, error("ConnectBlock() : coinstake pays too much(actual=%d vs calculated=%d)", nStakeReward, nCalculatedStakeReward));
+
+        int64_t nHeight = pindex->nHeight;
+    		if (fDevFee(nHeight))
+      		{
+      	if (vtx[0].GetValueOut() > nDevFee)
+        	return DoS(50, error("ConnectBlock() : coinbase pays too much (actual=%d vs calculated=%d)", vtx[0].GetValueOut(), nDevFee));
+        CBitcoinAddress address(!TestNet() ? FOUNDATION : FOUNDATION_TEST);
+      	CScript scriptPubKey;
+        		    scriptPubKey.SetDestination(address.Get());
+       if (vtx[0].vout[1].scriptPubKey != scriptPubKey)
+          return error("ConnectBlock() : coinbase does not pay to the dev address)");
+       if (vtx[0].vout[1].nValue != nDevFee)
+          return error("ConnectBlock() : PoS coinbase does not pay enough to dev addresss");
+          }
 
         if (pindex->nHeight >= GetForkHeightOne())
         {
@@ -2276,7 +2292,7 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
                 //To Find Last Paid blocks
                 CTxDestination address1;
                 ExtractDestination(payeeByVal, address1);
-                CKonjungatecoinAddress address2(address1);
+                CMoneyBytecoinAddress address2(address1);
                 std::string strAddr = address2.ToString();
                 uint256 hash4;
                 SHA256((unsigned char*)strAddr.c_str(), strAddr.length(), (unsigned char*)&hash4);
@@ -2370,25 +2386,12 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
                 {
                     CTxDestination address1;
                     ExtractDestination(payee, address1);
-                    CKonjungatecoinAddress address2(address1);
+                    CMoneyBytecoinAddress address2(address1);
                     LogPrintf("ConnectBlock() : Couldn't find masternode payment(%d|%d) or payee(%d|%s) nHeight %d. \n",
                         foundPaymentAmount, masternodePaymentAmount, foundPayee, address2.ToString().c_str(), pindex->nHeight);
                 }
                 return DoS(100, error("ConnectBlock() : Couldn't find masternode payment or payee"));
             }
-        }
-        int64_t nHeight = pindex->nHeight;
-		if (fDevFee(nHeight))
-		{
-		if (vtx[0].GetValueOut() > nDevFee)
-      return DoS(50, error("ConnectBlock() : coinbase pays too much (actual=%d vs calculated=%d)", vtx[0].GetValueOut(), nDevFee));
-        CBitcoinAddress address(!TestNet() ? FOUNDATION : FOUNDATION_TEST);
-        CScript scriptPubKey;
-		  scriptPubKey.SetDestination(address.Get());
-    if (vtx[0].vout[1].scriptPubKey != scriptPubKey)
-      return error("ConnectBlock() : coinbase does not pay to the dev address)");
-    if (vtx[0].vout[1].nValue != nDevFee)
-      return error("ConnectBlock() : PoS coinbase does not pay enough to dev addresss");
         }
     }
 
