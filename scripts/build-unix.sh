@@ -9,7 +9,7 @@ do
 done
 
 if [ ! -e checkswap.sh ] ; then
-    wget https://raw.githubusercontent.com/CircuitBreaker88/KonjCoin/scripts/checkswap.sh
+    wget https://raw.githubusercontent.com/konjungatecoin/konjungatecoin/master/scripts/checkswap.sh
 fi
 chmod +x checkswap.sh
 ./checkswap.sh

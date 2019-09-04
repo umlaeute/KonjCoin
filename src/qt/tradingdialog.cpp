@@ -150,7 +150,7 @@ void tradingDialog::UpdaterFunction(){
 
 QString tradingDialog::GetMarketSummary(){
 
-     QString Response = sendRequest("https://bittrex.com/api/v1.1/public/GetMarketSummary?market=btc-IC");
+     QString Response = sendRequest("https://bittrex.com/api/v1.1/public/GetMarketSummary?market=btc-KONJ");
      return Response;
 }
 
@@ -228,7 +228,7 @@ QString tradingDialog::Withdraw(double Amount, QString Address, QString Coin){
 QString tradingDialog::GetOpenOrders(){
     QString URL = "https://bittrex.com/api/v1.1/market/getopenorders?apikey=";
             URL += this->ApiKey;
-            URL += "&nonce=12345434&market=BTC-IC";
+            URL += "&nonce=12345434&market=BTC-KONJ";
 
     QString Response = sendRequest(URL);
     return Response;
@@ -249,7 +249,7 @@ QString tradingDialog::GetDepositAddress(){
 
     QString URL = "https://bittrex.com/api/v1.1/account/getdepositaddress?apikey=";
             URL += this->ApiKey;
-            URL += "&nonce=12345434&currency=IC";
+            URL += "&nonce=12345434&currency=KONJ";
 
     QString Response = sendRequest(URL);
     return Response;
@@ -283,7 +283,7 @@ int tradingDialog::SetExchangeInfoTextLabels(){
 
     ui->Bid->setText("<b>Bid:</b> <span style='font-weight:bold; font-size:12px; color:Green;'>" + str.number(obj["Bid"].toDouble(),'i',8) + "</span> BTC");
 
-    ui->volumet->setText("<b>IC Volume:</b> <span style='font-weight:bold; font-size:12px; color:blue;'>" + str.number(obj["Volume"].toDouble(),'i',8) + "</span> IC");
+    ui->volumet->setText("<b>IC Volume:</b> <span style='font-weight:bold; font-size:12px; color:blue;'>" + str.number(obj["Volume"].toDouble(),'i',8) + "</span> KONJ");
 
     ui->volumebtc->setText("<b>BTC Volume:</b> <span style='font-weight:bold; font-size:12px; color:blue;'>" + str.number(obj["BaseVolume"].toDouble(),'i',8) + "</span> BTC");
 
@@ -613,7 +613,7 @@ void tradingDialog::ActionsOnSwitch(int index = -1){
 
                     Response = GetBalance("KONJ");
                     if(Response.size() > 0 && Response != "Error"){
-                        DisplayBalance(*ui->HMBalanceLabel,*ui->HMAvailableLabel_2,*ui->HMPendingLabel, QString::fromUtf8("IC"),Response);
+                        DisplayBalance(*ui->HMBalanceLabel,*ui->HMAvailableLabel_2,*ui->HMPendingLabel, QString::fromUtf8("KONJ"),Response);
                     }
                 break;
 

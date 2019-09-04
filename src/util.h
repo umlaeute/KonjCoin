@@ -298,7 +298,7 @@ void runCommand(std::string strCommand);
 bool ParseInt32(const std::string& str, int32_t *out);
 
 
-/** 
+/**
  * Format a paragraph of text to a fixed width, adding spaces for
  * indentation to any added line.
  */

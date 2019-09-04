@@ -10,9 +10,9 @@ rpcpass = ""
 
 
 if rpcpass == "":
-	access = ServiceProxy("http://127.0.0.1:45455")
+	access = ServiceProxy("http://127.0.0.1:21751")
 else:
-	access = ServiceProxy("http://"+rpcuser+":"+rpcpass+"@127.0.0.1:45455")
+	access = ServiceProxy("http://"+rpcuser+":"+rpcpass+"@127.0.0.1:21751")
 cmd = sys.argv[1].lower()
 
 if cmd == "backupwallet":
@@ -275,6 +275,8 @@ elif cmd == "setgenerate":
 		cpus = raw_input("Max processors/cores (-1 for unlimited, optional):")
 		try:
 			print access.setgenerate(gen, cpus)
+		except:
+			print access.setgenerate(gen)
 	except:
 		print "\n---An error occurred---\n"
 

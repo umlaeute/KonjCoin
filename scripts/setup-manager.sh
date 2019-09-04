@@ -6,12 +6,12 @@ CONFIG_FOLDER='"$HOME"/.Konjungate'
 BACKUP_FOLDER="$HOME/KonjungateBackups"
 COIN_DAEMON='konjungated'
 COIN_PATH='/usr/bin/'
-COIN_REPO='https://github.com/CircuitBreaker88/KonjCoin.git'
-#COIN_TGZ='http://github.com/KonjCoin/KonjCoin/releases/XXX.zip'
+COIN_REPO='https://github.com/CircuitBreaker88/ignitioncoin.git'
+#COIN_TGZ='http://github.com/CircuitBreaker88/ignitioncoin/releases/XXX.zip'
 #COIN_ZIP=$(echo $COIN_TGZ | awk -F'/' '{print $NF}')
 COIN_NAME='Konjungate'
-COIN_PORT=45454
-RPC_PORT=45455
+COIN_PORT=21750
+RPC_PORT=21751
 NODEIP=$(curl -s4 icanhazip.com)
 
 BLUE="\033[0;34m"
@@ -108,7 +108,7 @@ function update_config() {
   echo -e "${BLUE}================================================================================================================================"
   echo -e "${GREEN}Important: To complete the Masternode setup, you must set up your controller wallet"
   echo -e "${BLUE}================================================================================================================================${NC}"
-  echo -e "${PURPLE}Please follow this guide to setup the controller wallet, then return here to input your the genkey output: https://github.com/CircuitBreaker88/KonjCoin/wiki/Setup-Manager---Masternode-Asisstant-Setup-Script-Guide${NC}"
+  echo -e "${PURPLE}Please follow this guide to setup the controller wallet, then return here to input your the genkey output: https://github.com/CircuitBreaker88/ignitioncoin/wiki/Setup-Manager---Masternode-Asisstant-Setup-Script-Guide${NC}"
   echo -e "${BLUE}================================================================================================================================${NC}"
   read -p "${PURPLE}Please enter the ${NC}${GREEN}genkey${NC}:" COINKEY
   systemctl stop konjungate
@@ -129,7 +129,7 @@ externalip=$NODEIP:$COIN_PORT
 masternodeprivkey=$COINKEY
 masternodeaddr=$NODEIP:$COIN_PORT
 #Addnodes
-#addnode=123.456.78.9:45454
+#addnode=123.456.78.9:21750
 EOF
 systemctl start konjungate
 }
@@ -191,7 +191,7 @@ function prepare_system() {
         ./install-dependencies.sh
     else
         echo "Downloading latest install-dependencies script."
-        wget https://raw.githubusercontent.com/CircuitBreaker88/KonjCoin/scripts/install-dependencies.sh
+        wget https://raw.githubusercontent.com/konjungatecoin/konjungatecoin/master/scripts/install-dependencies.sh
         chmod +x install-dependencies.sh
         ./install-dependencies.sh
     fi
@@ -252,10 +252,10 @@ function install_konjungate() {
             mv ../bin/konjungated /usr/bin
         else
             echo "Cloning github repository.."
-            git clone https://github.com/CircuitBreaker88/KonjCoin
-            chmod +x ./KonjCoin/scripts
-            ./KonjCoin/scripts/build-unix.sh
-            mv ./KonjCoin/bin/konjungated /usr/bin
+            git clone https://github.com/CircuitBreaker88/ignitioncoin
+            chmod +x ./ignitioncoin/scripts
+            ./ignitioncoin/scripts/build-unix.sh
+            mv ./ignitioncoin/bin/konjungated /usr/bin
             if [ -e "$HOME"/konjungate-swap ]; then
                 echo "Removing temporary swap file"
                 swapoff "$HOME"/konjungate-swap
@@ -266,7 +266,7 @@ function install_konjungate() {
         echo "Download Executable Binary For Install"
         mkdir ./tmp
         cd tmp
-        wget https://github.com/$(wget https://github.com/CircuitBreaker88/KonjCoin/releases/latest -O - | egrep '/.*/.*/.*tar.gz' -o)
+        wget https://github.com/$(wget https://github.com/CircuitBreaker88/ignitioncoin/releases/latest -O - | egrep '/.*/.*/.*tar.gz' -o)
         tar -xvf *.tar.gz
         mv ./konjungated /usr/bin
         cd ..
@@ -284,10 +284,10 @@ function compile_linux_daemon() {
     prepare_system
     if [ ! -e ../Konjungate.pro ] ; then
         echo "Cloning Konjungate Coin github repository to this directory."
-        git clone https://github.com/CircuitBreaker88/KonjCoin
-        ./KonjCoin/scripts/build-unix.sh
+        git clone https://github.com/CircuitBreaker88/ignitioncoin
+        ./ignitioncoin/scripts/build-unix.sh
         clear
-        echo "Compile is complete, you can find the binary file in ./KonjCoin/bin/"
+        echo "Compile is complete, you can find the binary file in ./ignitioncoin/bin/"
     else
         echo "Compiling Source Code"
         ./build-unix.sh
@@ -302,10 +302,10 @@ function compile_linux_gui() {
     prepare_system
     if [ ! -e ../Konjungate.pro ] ; then
         echo "Cloning Konjungate Coin Github Repository"
-        git clone https://github.com/CircuitBreaker88/KonjCoin
-        ./KonjCoin/scripts/build-unix.sh --with-gui
+        git clone https://github.com/CircuitBreaker88/ignitioncoin
+        ./ignitioncoin/scripts/build-unix.sh --with-gui
         clear
-        echo "Compile is complete, you can find the binary file in ./KonjCoin/bin/"
+        echo "Compile is complete, you can find the binary file in ./ignitioncoin/bin/"
     else
         echo "Compiling Source Code"
         ./build-unix.sh --with-gui
@@ -320,11 +320,11 @@ function compile_windows_exe() {
     prepare_system
     if [ ! -e ../Konjungate.pro ] ; then
         echo "Cloning Konjungate Coin Github Repository"
-        git clone https://github.com/CircuitBreaker88/KonjCoin
-        chmod +x ./KonjCoin/scripts/*
-        ./KonjCoin/scripts/clean.sh
-        ./KonjCoin/scripts/configure-mxe.sh
-        ./KonjCoin/scripts/build-win-mxe.sh
+        git clone https://github.com/CircuitBreaker88/ignitioncoin
+        chmod +x ./ignitioncoin/scripts/*
+        ./ignitioncoin/scripts/clean.sh
+        ./ignitioncoin/scripts/configure-mxe.sh
+        ./ignitioncoin/scripts/build-win-mxe.sh
     else
         echo "Compiling Source Code"
         chmod +x ./*

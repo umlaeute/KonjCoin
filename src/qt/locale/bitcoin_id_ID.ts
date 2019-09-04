@@ -15,10 +15,10 @@
         <location line="+41"/>
         <source>Copyright © 2009-2014 The Bitcoin developers
 Copyright © 2012-2014 The NovaCoin developers
-Copyright © 2017-2018 The Konjungate developers</source>
+Copyright © 2017-2019 The Konjungate developers</source>
         <translation>Copyright © 2009-2014 para pengembang Bitcoin
 Copyright © 2012-2014 para pengembang NovaCoin
-Copyright © 2017-2018 para pengembang Konjungate</translation>
+Copyright © 2017-2019 para pengembang Konjungate</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1717,8 +1717,8 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
         <location line="+86"/>
         <location line="+86"/>
         <location line="+32"/>
-        <source>0.00 IC</source>
-        <translation>123.456 IC {0.00 ?}</translation>
+        <source>0.00 MON</source>
+        <translation>123.456 MON {0.00 ?}</translation>
     </message>
     <message>
         <location line="-191"/>
@@ -1787,7 +1787,7 @@ This label turns red, if the priority is smaller than &quot;medium&quot;.
     </message>
     <message>
         <location line="+16"/>
-        <source>123.456 IC</source>
+        <source>123.456 MON</source>
         <translation type="unfinished"/>
     </message>
     <message>

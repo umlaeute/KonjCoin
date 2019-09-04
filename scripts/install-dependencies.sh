@@ -7,5 +7,4 @@ sudo apt-get -y update && apt-get -y install git build-essential libdb++-dev lib
     automake git p7zip-full intltool libc6-dev-i386 g++-multilib xz-utils wget sed python pkg-config perl patch openssl \
     make cmake bash bzip2 gettext g++ libffi-dev libltdl-dev libxml-parser-perl
 sudo apt-get -y install libssl1.0-dev
-sudo apt-get -y install libssl1.0
 sudo apt-get -y install libssl-dev

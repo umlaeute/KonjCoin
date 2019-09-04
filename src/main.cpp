@@ -48,10 +48,10 @@ set<pair<COutPoint, unsigned int> > setStakeSeen;
 
 CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);
 
-unsigned int nStakeMinAge = 30 * 60; // 30 minutes
+unsigned int nStakeMinAge = 5 * 10 * 60; // 8 hours
 unsigned int nModifierInterval = 8 * 60; // time to elapse before new modifier is computed
 
-int nCoinbaseMaturity = 30;
+int nCoinbaseMaturity = 200;
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 
@@ -1429,15 +1429,17 @@ void static PruneOrphanBlocks()
     mapOrphanBlocks.erase(hash);
 }
 
-bool fDevFee(int nHeight)
-  {
-    if (nHeight < 100) return false;
-    return (nHeight % 1000 < 1);
-  }
 
-int64_t nDevFee = 10 * COIN;
+//Developer Fee based on % PoW block paid weekly
+// XXXX Coins every XXXX blocks
+bool fDevFee(int nHeight)
+{
+  if (nHeight < 1) return false;
+  return (nHeight % 10080 < 1);}
+
+int64_t nDevFee = 2016000 * COIN;
+
 // miner's coin base reward
-// the yr1 1Mil, yr2-5 1Mil 5-10 1Mil 10-20 1Mil 20-50 1Mil distribution
 int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
 {
 
@@ -1452,33 +1454,12 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
     }
     else if(nHeight == 2)
     {
-      nSubsidy = 100000 * COIN;
+      nSubsidy = 5000000 * COIN;
     }
-    else if(nHeight < 200) // live test before launch = 198 coin
+    else if(nHeight < 200)
     {
-      nSubsidy = 1 * COIN;
+      nSubsidy = 250 * COIN;
     }
-    else if(nHeight < 262800) // 1st year aproximatly = (262800 - 200 )*4 =  892,840 coins + 100198 = total 993,038 coins
-    {
-      nSubsidy = 3.4 * COIN;
-    }
-    else if(nHeight < 1314000) // 5th year aproximatly = (1314000 - 262800)* 0.95 = 998,640 coins
-    {
-      nSubsidy = 0.95 * COIN;
-    }
-    else if(nHeight < 2628000) // 10th year aproximatly = (2628000 - 1314000)* 0.75 = 985,500 coins
-    {
-      nSubsidy = 0.75 * COIN;
-    }
-    else if(nHeight < 5256000) // 20th year aproximatly = (5256000 - 2628000)* 0.4 = 1,051,200 coins
-    {
-      nSubsidy = 0.4 * COIN;
-    }
-    else if(nHeight < 13140000) // 50th year aproximatly = (13140000 - 5256000)* 0.12 = 946,080 coins
-    {
-      nSubsidy = 0.12 * COIN;
-    }
-
     return nSubsidy + nFees;
 
 }
@@ -1493,33 +1474,16 @@ int64_t GetProofOfStakeReward(int nHeight, int64_t nCoinAge, int64_t nFees)
 
     int64_t nSubsidy = STATIC_POS_REWARD;
 
-    if(nHeight < 200) // live test before launch = 198 coin
+    if(nHeight < 200)
     {
       nSubsidy = 1 * COIN;
     }
-    else if(nHeight < 262800) // 1st year aproximatly = (262800 - 200 )*4 =  892,840 coins + 100198 = total 993,038 coins
+    else if(nHeight < 10000)
     {
-      nSubsidy = 3.4 * COIN;
+      nSubsidy = 650 * COIN;
     }
-    else if(nHeight < 1314000) // 5th year aproximatly = (1314000 - 262800)* 0.95 = 998,640 coins
-    {
-      nSubsidy = 0.95 * COIN;
-    }
-    else if(nHeight < 2628000) // 10th year aproximatly = (2628000 - 1314000)* 0.75 = 985,500 coins
-    {
-      nSubsidy = 0.75 * COIN;
-    }
-    else if(nHeight < 5256000) // 20th year aproximatly = (5256000 - 2628000)* 0.4 = 1,051,200 coins
-    {
-      nSubsidy = 0.4 * COIN;
-    }
-    else if(nHeight < 13140000) // 50th year aproximatly = (13140000 - 5256000)* 0.12 = 946,080 coins
-    {
-      nSubsidy = 0.12 * COIN;
-    }
-
     return nSubsidy + nFees;
-}
+  }
 
 /* Locate a block meeting the range and type specified down the block index;
  * for example, PoW distance 1 means nRange set to 1 and fProofOfStake set to 0,
@@ -2157,10 +2121,15 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
     BOOST_FOREACH(CTransaction& tx, vtx)
     {
         uint256 hashTx = tx.GetHash();
-        nInputs += tx.vin.size();
-        nSigOps += GetLegacySigOpCount(tx);
+        CTxIndex txindexOld;
+        if (txdb.ReadTxIndex(hashTx, txindexOld)) {
+            BOOST_FOREACH(CDiskTxPos &pos, txindexOld.vSpent)
+                if (pos.IsNull())
+                    return DoS(100, error("ConnectBlock() : tried to overwrite transaction"));
+        }
 
-        if (nSigOps > GetMaxBlockSigOps())
+        nSigOps += GetLegacySigOpCount(tx);
+        if (nSigOps > MAX_BLOCK_SIGOPS)
             return DoS(100, error("ConnectBlock() : too many sigops"));
 
         CDiskTxPos posThisTx(pindex->nFile, pindex->nBlockPos, nTxPos);
@@ -2292,7 +2261,7 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
                 //To Find Last Paid blocks
                 CTxDestination address1;
                 ExtractDestination(payeeByVal, address1);
-                CMoneyBytecoinAddress address2(address1);
+                CKonjungatecoinAddress address2(address1);
                 std::string strAddr = address2.ToString();
                 uint256 hash4;
                 SHA256((unsigned char*)strAddr.c_str(), strAddr.length(), (unsigned char*)&hash4);
@@ -2386,7 +2355,7 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
                 {
                     CTxDestination address1;
                     ExtractDestination(payee, address1);
-                    CMoneyBytecoinAddress address2(address1);
+                    CKonjungatecoinAddress address2(address1);
                     LogPrintf("ConnectBlock() : Couldn't find masternode payment(%d|%d) or payee(%d|%s) nHeight %d. \n",
                         foundPaymentAmount, masternodePaymentAmount, foundPayee, address2.ToString().c_str(), pindex->nHeight);
                 }
@@ -4976,10 +4945,10 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
 
 int64_t GetMasternodePayment(int nHeight, int64_t blockValue)
 {
-    int64_t ret = blockValue * 1/2; // 50%
+    int64_t ret = blockValue * 70/100; // 70%
 
     if(nHeight >= GetForkHeightTwo())
-        ret = blockValue * 55/100; //55%
+        ret = blockValue * 70/100; // 70% No Change
 
     return ret;
 }

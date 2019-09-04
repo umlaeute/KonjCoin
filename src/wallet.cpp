@@ -2451,7 +2451,7 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
                     } else if (coin_type == ONLY_NOT10000IFMN) {
                         strFailReason = _(" Unable to locate enough Darksend non-denominated funds for this transaction.");
                     } else if (coin_type == ONLY_NONDENOMINATED_NOT10000IFMN ) {
-                        strFailReason = _(" Unable to locate enough Darksend non-denominated funds for this transaction that are not equal 1000 IC.");
+                        strFailReason = _(" Unable to locate enough Darksend non-denominated funds for this transaction that are not equal 1000 MON.");
                     } else {
                         strFailReason = _(" Unable to locate enough Darksend denominated funds for this transaction.");
                         strFailReason += _(" Darksend uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.");
