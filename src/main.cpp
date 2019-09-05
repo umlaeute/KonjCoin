@@ -1447,7 +1447,7 @@ int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
     if(TestNet()) return 1000 * COIN;
     //////////////////////////////////
 
-    int64_t nSubsidy = 259 * COIN;
+    int64_t nSubsidy = 250 * COIN;
 	  if (nHeight < 2)
     {
     	nSubsidy = 0 * COIN;
