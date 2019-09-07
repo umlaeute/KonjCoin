@@ -71,7 +71,7 @@ public:
 		// Build the genesis block. Note that the output of the genesis coinbase cannot
 		// be spent as it did not originally exist in the database.
 
-		const char* pszTimestamp = "Here 4 Sept 2019 we start the Konjungate";
+		const char* pszTimestamp = "Here 4 Sept 2019 we start the Konjungate Chain";
 		std::vector<CTxIn> vin;
 		vin.resize(1);
 		vin[0].scriptSig = CScript() << 0 << CBigNum(42) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
@@ -83,14 +83,14 @@ public:
 		genesis.hashPrevBlock = 0;
 		genesis.hashMerkleRoot = genesis.BuildMerkleTree();
 		genesis.nVersion = 1;
-		genesis.nTime = 1513698048; //
+		genesis.nTime = 1513698048;
 		genesis.nBits = 520159231;
-		genesis.nNonce = 55599;
+		genesis.nNonce = 103279;
 
 		hashGenesisBlock = genesis.GetHash();
 
-		assert(genesis.hashMerkleRoot == uint256("0x5436c855d3a06521bf1b50fa3ed1fd2c5b3a18a426447316eb3a04fe3f42571d"));
-		assert(hashGenesisBlock == uint256("0x00001bf1bc996b95165e2217035160dad706d9231e8c86432e81de8e81cbdc84"));
+		assert(genesis.hashMerkleRoot == uint256("0x83349a503683497db92220f1c63dae29b9deb736afa458abde4957f638a627ee"));
+		assert(hashGenesisBlock == uint256("0x00002b696e1b86375c688cbcc6c7fd8cf62c6e47c0b4a9a107b3174c1879674d"));
 
 
 		base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 46); // K
@@ -111,11 +111,9 @@ public:
 		convertSeeds(vFixedSeeds, pnSeed, ARRAYLEN(pnSeed), nDefaultPort);
 
 		nPoolMaxTransactions = 3;
-		//strSporkKey = "046f78dcf911fbd61910136f7f0f8d90578f68d0b3ac973b5040fb7afb501b5939f39b108b0569dca71488f5bbf498d92e4d1194f6f941307ffd95f75e76869f0e";
-		//strMasternodePaymentsPubKey = "046f78dcf911fbd61910136f7f0f8d90578f68d0b3ac973b5040fb7afb501b5939f39b108b0569dca71488f5bbf498d92e4d1194f6f941307ffd95f75e76869f0e";
 		strDarksendPoolDummyAddress = "i7FBJNGDmEsU5wx2m3xw85N8kRgCqA8S7L";
-		nLastPOWBlock = 10000000000; //No Last Block **Remove nLastPOWBlock
-		nPOSStartBlock = 1;
+		nLastPOWBlock = 999999999999999999999; //No Last Block **Remove nLastPOWBlock
+		nPOSStartBlock = 250;
 	}
 
 
