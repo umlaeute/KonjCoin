@@ -7,6 +7,7 @@ Algorithm: neoscrypt
 Total Coin Supply: 21 billion
 Block Reward: 1000 KONJ
 
+
 Reward Distribution:
 1000 KONJUNGATE / Block. shared as follows:
 POW: 250 KONJ (no charity fee taken from POW)
@@ -17,9 +18,7 @@ Charity: 100 KON
 Block Time: 2 Min.
 Masternode Collateral: 600.000 KONJ
 Block Size: 1MB
-
-Premine: 409.000.000 KONJ
-for SWAP/Charity- and Developer Fund
+Premine: 409.000.000 KONJ for SWAP/Charity- and Developer Fund
 
 https://www.konjungate.net
 
