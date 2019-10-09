@@ -11,6 +11,7 @@
 
 #include <boost/assign/list_of.hpp>
 
+using namespace std;
 using namespace boost::assign;
 
 struct SeedSpec6 {
@@ -24,31 +25,21 @@ struct SeedSpec6 {
 // Main network
 //
 
-// Convert the pnSeeds array into usable address objects.
-static void convertSeeds(std::vector<CAddress> &vSeedsOut, const unsigned int *data, unsigned int count, int port)
+//! Convert the pnSeeds6 array into usable address objects.
+static void convertSeed6(std::vector<CAddress>& vSeedsOut, const SeedSpec6* data, unsigned int count)
 {
-	// It'll only connect to one or two seed nodes because once it connects,
-	// it'll get a pile of addresses with newer timestamps.
-	// Seed nodes are given a random 'last seen time' of between one and two
-	// weeks ago.
-	const int64_t nOneWeek = 7 * 24 * 60 * 60;
-	for (unsigned int k = 0; k < count; ++k)
-	{
-		struct in_addr ip;
-		unsigned int i = data[k], t;
-
-		// -- convert to big endian
-		t = (i & 0x000000ff) << 24u
-			| (i & 0x0000ff00) << 8u
-			| (i & 0x00ff0000) >> 8u
-			| (i & 0xff000000) >> 24u;
-
-		memcpy(&ip, &t, sizeof(ip));
-
-		CAddress addr(CService(ip, port));
-		addr.nTime = GetTime() - GetRand(nOneWeek) - nOneWeek;
-		vSeedsOut.push_back(addr);
-	}
+    // It'll only connect to one or two seed nodes because once it connects,
+    // it'll get a pile of addresses with newer timestamps.
+    // Seed nodes are given a random 'last seen time' of between one and two
+    // weeks ago.
+    const int64_t nOneWeek = 7 * 24 * 60 * 60;
+    for (unsigned int i = 0; i < count; i++) {
+        struct in6_addr ip;
+        memcpy(&ip, data[i].addr, sizeof(ip));
+        CAddress addr(CService(ip, data[i].port));
+        addr.nTime = GetTime() - GetRand(nOneWeek) - nOneWeek;
+        vSeedsOut.push_back(addr);
+    }
 }
 
 class CMainParams : public CChainParams {
@@ -108,7 +99,7 @@ public:
     vSeeds.push_back(CDNSSeedData("77.78.204.210", "77.78.204.210"));
 //  vSeeds.push_back(CDNSSeedData("", ""));
 
-		convertSeeds(vFixedSeeds, pnSeed, ARRAYLEN(pnSeed), nDefaultPort);
+		convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
 
 		nPoolMaxTransactions = 3;
 		strDarksendPoolDummyAddress = "i7FBJNGDmEsU5wx2m3xw85N8kRgCqA8S7L";
@@ -167,7 +158,8 @@ public:
 		base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x35)(0x87)(0xCF).convert_to_container<std::vector<unsigned char> >();
 		base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x35)(0x83)(0x94).convert_to_container<std::vector<unsigned char> >();
 
-		convertSeeds(vFixedSeeds, pnTestnetSeed, ARRAYLEN(pnTestnetSeed), nDefaultPort);
+		vFixedSeeds.clear();
+        vSeeds.clear();
 
 		nLastPOWBlock = nTestnetForkTwo + 20;
 	}
