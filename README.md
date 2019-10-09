@@ -1,4 +1,4 @@
-# Konjungate Core v1.0.0
+# Konjungate Core v1.0.1
 
 https://www.konjungate.net
 
