@@ -1,5 +1,26 @@
 # Konjungate Core v1.0.1
 
+Name: Konjungate
+Ticker: KONJ
+Type: Hybrid, POS / POW / Masternodes
+Algorithm: neoscrypt
+Total Coin Supply: 21 billion
+Block Reward: 1000 KONJ
+
+Reward Distribution:
+1000 KONJUNGATE / Block. shared as follows:
+POW: 250 KONJ (no charity fee taken from POW)
+POS: 195 KONJ
+MN: 455 KONJ
+Charity: 100 KON
+
+Block Time: 2 Min.
+Masternode Collateral: 600.000 KONJ
+Block Size: 1MB
+
+Premine: 409.000.000 KONJ
+for SWAP/Charity- and Developer Fund
+
 https://www.konjungate.net
 
 ## What is Konjungate?
@@ -14,6 +35,10 @@ How dose it work? During the creation of the KONJUNGATE Blockchain, 1,25% of the
 The art installations The distribution of KONJUNGATE to international Art Institutions will be realized during several Media Art installations (created by the Austrian Media Art Entity MACHFELD (Sabine Maier and Michael Mastrototaro)). The media art object has a Masternode of KONJUNGATE inside. This Masternode will generate further KONJUNGATE Tokens during the time. The generated Tokens will be distributed 65% to the Masternode holder (i.e. Institutions) and to 35% to the Miners. (After 25% Charity Found for the Foundation.)
 
 People will be able to store, spend, exchange and later borrow practically any Cryptocurrency in the same way as any other currency, but in a quicker, cheaper and more secure way than it is possible now in any traditional bank. KONJ is a future of Art Founding System with limitless opportunities.
+
+## Coin Specifications
+
+
 
 ## License
 
