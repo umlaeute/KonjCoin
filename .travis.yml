@@ -1,0 +1,61 @@
+language: cpp
+
+os:
+  - osx
+  - linux
+
+addons:
+  homebrew:
+    update: true
+    packages:
+      - qt
+      - autoconf
+      - automake
+      - libtool
+      - boost@1.59
+      - berkeley-db@4
+      - openssl
+      - miniupnpc
+      - gmp
+  apt:
+    packages:
+      - qt5-default
+      - qt5-qmake
+      - qtbase5-dev-tools
+      - qttools5-dev-tools
+      - build-essential
+      - libboost-dev
+      - libboost-system-dev
+      - libboost-filesystem-dev
+      - libboost-program-options-dev
+      - libboost-thread-dev
+      - libssl-dev
+      - libdb++-dev
+      - libminiupnpc-dev
+
+script:
+  - export MACOSX_DEPLOYMENT_TARGET=10.12
+  - if [[ "x${TRAVIS_OS_NAME}" = "xosx" ]] ; then export PATH="/usr/local/opt/qt/bin:$PATH" ; fi
+  - cat Konjungate.pro | sed -e 's|/usr/local/openssl-[^/]*/|/usr/local/opt/openssl/|g' -e 's|/usr/local/Cellar/openssl/[^/]*/|/usr/local/opt/openssl/|g' > Konjungate.pro.sed && cat Konjungate.pro.sed > Konjungate.pro && rm Konjungate.pro.sed
+  - qmake --version
+  - qmake USE_UPNP=1 Konjungate.pro
+  - make
+  - mkdir deployment
+  - if [[ "x${TRAVIS_OS_NAME}" = "xosx" ]] ; then macdeployqt Konjungate-qt.app -dmg ; fi
+  - ls
+  - mv Konjungate-qt.dmg deployment/KonjungateQt-macOS$(MACOSX_DEPLOYMENT_TARGET).dmg || mv Konjungate-qt deployment/KonjungateQt-$(lsb_release -si).$(uname -m)
+
+after_script:
+  - ls -lha deployment
+
+deploy:
+  provider: releases
+  file: deployment/Konjugate*
+  file_glob: true
+  skip_cleanup: true
+  on:
+    branch: master
+    tags: true
+# TODO: add an api-key for deployment to github!
+#       see https://docs.travis-ci.com/user/deployment/releases/#authenticating-with-an-oauth-token
+  api-key: TOP_SECRET_KEY
