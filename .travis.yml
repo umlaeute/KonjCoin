@@ -43,7 +43,7 @@ script:
   - mkdir deployment
   - if [[ "x${TRAVIS_OS_NAME}" = "xosx" ]] ; then macdeployqt Konjungate-qt.app -dmg ; fi
   - ls
-  - mv Konjungate-qt.dmg deployment/KonjungateQt-macOS$(MACOSX_DEPLOYMENT_TARGET).dmg || mv Konjungate-qt deployment/KonjungateQt-$(lsb_release -si).$(uname -m)
+  - mv Konjungate-qt.dmg "deployment/KonjungateQt-macOS${MACOSX_DEPLOYMENT_TARGET}.dmg" || mv Konjungate-qt "deployment/KonjungateQt-$(lsb_release -si).$(uname -m)"
 
 after_script:
   - ls -lha deployment
